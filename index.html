@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterPlex</title>
+    <link rel="icon" type="image/png" href="assets/img/fav.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        html.smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ffc107 0%, #ffca28 100%);
+            border-radius: 10px;
+            border: 2px solid #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #ffca28 0%, #ffd54f 100%);
+        }
+
+        /* Firefox Scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #ffc107 #1a1a1a;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        header.scrolled {
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffc107;
+        }
+
+        .btn-primary {
+            background: #ffc107;
+            color: #000;
+            padding: 0.7rem 1.8rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #ffca28;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffc107;
+            padding: 0.7rem 1.8rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid #ffc107;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-block;
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #ffc107;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            transition: 0.3s;
+        }
+
+        .mobile-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -60%;
+            width: 60%;
+            height: 100vh;
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 5rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 1001;
+            transition: left 0.3s ease-in-out;
+            border-right: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .mobile-nav.active {
+            left: 0;
+        }
+
+        .mobile-nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .mobile-nav a:hover {
+            color: #ffc107;
+            padding-left: 0.5rem;
+        }
+
+        .mobile-nav .btn-primary {
+            margin-top: 1rem;
+            display: inline-block;
+            text-align: center;
+            padding: 1rem 2rem;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 5%;
+            position: relative;
+            background-image: url('assets/img/background-hero.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(15,15,15,0.4) 0%, rgba(15,15,15,0.9) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #e0e0e0;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .btn-secondary {
+                margin-left: 0;
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            background: #0f0f0f;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .feature-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s;
+        }
+
+        .feature-card:nth-child(1) .feature-icon {
+            border-color: #ffc107;
+        }
+
+        .feature-card:nth-child(1) .feature-icon svg {
+            stroke: #ffc107;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            border-color: #00bcd4;
+        }
+
+        .feature-card:nth-child(2) .feature-icon svg {
+            stroke: #00bcd4;
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            border-color: #9c27b0;
+        }
+
+        .feature-card:nth-child(3) .feature-icon svg {
+            stroke: #9c27b0;
+        }
+
+        .feature-card:nth-child(4) .feature-icon {
+            border-color: #ff5722;
+        }
+
+        .feature-card:nth-child(4) .feature-icon svg {
+            stroke: #ff5722;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Content Section */
+        .content-showcase {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, #0f0f0f 0%, #1a0a2e 100%);
+        }
+
+        .content-showcase h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 3rem;
+            letter-spacing: -1px;
+        }
+
+        .content-preview {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .content-image {
+            flex: 1;
+            min-width: 300px;
+            background-image: url('assets/img/content-preview.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .content-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .content-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #ffc107;
+        }
+
+        .content-text p {
+            color: #d0d0d0;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 5%;
+            background: #0f0f0f;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .pricing-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid-dual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffc107 0%, #ffca28 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .pricing-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .pricing-card:hover {
+            border-color: #ffc107;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 193, 7, 0.2);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #ffc107;
+            transform: scale(1);
+        }
+
+        .pricing-badge {
+            background: #ffc107;
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffc107;
+            margin: 1.5rem 0;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: #888;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #2a2a2a;
+            color: #d0d0d0;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li:before {
+            content: '✓';
+            color: #ffc107;
+            font-weight: bold;
+            margin-right: 0.8rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        footer p {
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            color: #888;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #ffc107;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-preview {
+                flex-direction: column;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-grid-dual {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 1rem 3%;
+            }
+
+            .hero, .features, .content-showcase, .pricing {
+                padding: 4rem 3%;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scrollLogos {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Partners Section */
+        .partners {
+            padding: 4rem 0;
+            background: #0a0a0a;
+            overflow: hidden;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .partners h3 {
+            text-align: center;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 3rem;
+            color: #ffc107;
+            letter-spacing: -0.5px;
+        }
+
+        .partners-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .partners-track {
+            display: flex;
+            width: fit-content;
+            animation: scrollLogos 30s linear infinite;
+        }
+
+        .partners-track:hover {
+            animation-play-state: paused;
+        }
+
+        .partner-logo {
+            flex-shrink: 0;
+            width: 180px;
+            height: 100px;
+            margin: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .partner-logo:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            border-color: #ffc107;
+        }
+
+        .partner-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: grayscale(100%) brightness(1.5);
+            transition: filter 0.3s;
+        }
+
+        .partner-logo:hover img {
+            filter: grayscale(0%) brightness(1);
+        }
+
+        @media (max-width: 768px) {
+            .partner-logo {
+                width: 140px;
+                height: 80px;
+                margin: 0 1rem;
+                padding: 1rem;
+            }
+
+            .partners-track {
+                animation: scrollLogos 20s linear infinite;
+            }
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            cursor: pointer;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-float::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float img {
+            width: 65px;
+            height: 65px;
+            border-radius: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+            position: relative;
+            z-index: 1;
+            display: block;
+            object-fit: contain;
+        }
+
+        .whatsapp-float:hover::before {
+            animation: none;
+        }
+
+        .whatsapp-float:hover img {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 70px;
+                height: 70px;
+            }
+
+            .whatsapp-float img {
+                width: 55px;
+                height: 55px;
+            }
+        }
+
+        .hero-content > * {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .hero-content h1 {
+            animation-delay: 0.2s;
+        }
+
+        .hero-content p {
+            animation-delay: 0.4s;
+        }
+
+        .hero-content .btn-primary {
+            animation-delay: 0.6s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="logo">
+            <img src="assets/img/logo.png" alt="MasterPlex Logo">
+        </div>
+        <nav>
+            <a href="#home">Início</a>
+            <a href="#recursos">Recursos</a>
+            <a href="#planos">Planos</a>
+            <a href="#contato">Contato</a>
+            <a href="#" class="btn-primary">Assinar Agora</a>
+        </nav>
+        <div class="mobile-menu" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="#home">Início</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#planos">Planos</a>
+        <a href="#contato">Contato</a>
+        <a href="#" class="btn-primary">Assinar Agora</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Assista Seus Filmes e Séries Favoritos</h1>
+            <p>Mais de 90 mil conteúdos disponíveis em alta qualidade. Tecnologia de ponta para uma experiência única de streaming.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary" onclick="openWhatsApp('assinar'); return false;">Começar Agora</a>
+                <a href="#" class="btn-secondary" onclick="openWhatsApp('teste'); return false;">Peça um Teste Grátis</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="recursos">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20"></path>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                </div>
+                <h3>Em Todo Brasil</h3>
+                <p>Assista de qualquer lugar do Brasil com nossa plataforma disponível 24/7.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                        <line x1="7" y1="2" x2="7" y2="22"></line>
+                        <line x1="17" y1="2" x2="17" y2="22"></line>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <line x1="2" y1="7" x2="7" y2="7"></line>
+                        <line x1="2" y1="17" x2="7" y2="17"></line>
+                        <line x1="17" y1="17" x2="22" y2="17"></line>
+                        <line x1="17" y1="7" x2="22" y2="7"></line>
+                    </svg>
+                </div>
+                <h3>90 Mil+ Títulos</h3>
+                <p>Catálogo imenso com filmes, séries, documentários e conteúdo exclusivo para toda família.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <h3>100% Sem Anúncios</h3>
+                <p>Experiência premium sem interrupções. Assista seu conteúdo favorito do início ao fim.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        <rect x="2" y="6" width="20" height="12" rx="2" ry="2" opacity="0.3"></rect>
+                    </svg>
+                </div>
+                <h3>Multi-Dispositivos</h3>
+                <p>Assista em Smart TVs, smartphones, tablets, computadores e muito mais com sincronização perfeita.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Showcase -->
+    <section class="content-showcase">
+        <h2>Descubra um Universo de Entretenimento</h2>
+        <div class="content-preview">
+            <div class="content-image"></div>
+            <div class="content-text">
+                <h3>Tecnologia de Ponta</h3>
+                <p>Streaming em 4K Ultra HD com som Dolby Atmos. Nossa infraestrutura garante a melhor qualidade de imagem e som para você.</p>
+                <p>Downloads ilimitados para assistir offline. Legendas e áudios em múltiplos idiomas. Interface intuitiva com recomendações personalizadas baseadas em IA.</p>
+                <p>Perfis individuais para cada membro da família com controle parental avançado.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="partners">
+        <h3>Aplicativos Parceiros</h3>
+        <div class="partners-slider">
+            <div class="partners-track">
+                <div class="partner-logo">
+                    <img src="assets/img/quick-player.png" alt="Quick Player">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/max-player.png" alt="Max Player">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/assist-plus.png" alt="Assist+">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/blased-player.png" alt="Blased Player">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/playsim.png" alt="PlaySIM">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/fun-play.png" alt="FUN Play">
+                </div>
+                <!-- Duplicando para loop infinito -->
+                <div class="partner-logo">
+                    <img src="assets/img/quick-player.png" alt="Quick Player">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/max-player.png" alt="Max Player">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/assist-plus.png" alt="Assist+">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/blased-player.png" alt="Blased Player">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/playsim.png" alt="PlaySIM">
+                </div>
+                <div class="partner-logo">
+                    <img src="assets/img/fun-play.png" alt="FUN Play">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="planos">
+        <h2>Escolha Seu Plano Ideal</h2>
+        <p style="text-align: center; color: #d0d0d0; font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; line-height: 1.6;">
+            Assine e tenha acesso ao catálogo completo dos principais streamings: Netflix, Amazon Prime, Disney+, HBO Max, Paramount+ e muito mais!
+        </p>
+        <div class="pricing-grid-dual">
+            <div class="pricing-card">
+                <div class="pricing-badge">PLANO FAMÍLIA</div>
+                <h3>Recarga Mensal</h3>
+                <div class="price">R$ 25<span>/mês</span></div>
+                <ul class="pricing-features">
+                    <li>Acesso total ao catálogo</li>
+                    <li>Netflix, Amazon, Disney+ e mais</li>
+                    <li>Qualidade HD e 4K</li>
+                    <li>Conteúdo exclusivo antecipado</li>
+                    <li>Suporte prioritário</li>
+                </ul>
+                <a href="#" class="btn-primary btn-large" onclick="openWhatsApp('plano25'); return false;">Começar R$ 25/mês</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="pricing-badge">PLANO COMPLETO</div>
+                <h3>Recarga Mensal +18</h3>
+                <div class="price">R$ 30<span>/mês</span></div>
+                <ul class="pricing-features">
+                    <li>Tudo do Plano Família</li>
+                    <li>Conteúdo Adulto +18</li>
+                    <li>Catálogos Premium</li>
+                    <li>Qualidade HD e 4K</li>
+                    <li>Privacidade garantida</li>
+                    <li>Suporte VIP 24/7</li>
+                </ul>
+                <a href="#" class="btn-primary btn-large" onclick="openWhatsApp('plano30'); return false;">Começar R$ 30/mês</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Float Button -->
+    <a href="#" class="whatsapp-float" onclick="openWhatsApp('contato'); return false;" title="Fale conosco no WhatsApp">
+        <img src="assets/img/contatozap.png" alt="WhatsApp">
+    </a>
+
+    <!-- Footer -->
+    <footer id="contato">
+        <p>&copy; 2024 MasterPlex. Todos os direitos reservados.</p>
+        <p>Streaming premium de filmes e séries com a melhor tecnologia do mercado.</p>
+        <div class="social-links">
+            <a href="#">📘</a>
+            <a href="#">📷</a>
+            <a href="#">🐦</a>
+            <a href="#">▶️</a>
+        </div>
+    </footer>
+
+    <script>
+        // WhatsApp Integration
+        const whatsappNumber = '5511917128774';
+        
+        function openWhatsApp(type) {
+            let message = '';
+            
+            switch(type) {
+                case 'teste':
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de pedir um teste grátis. Poderia me fornecer mais informações?';
+                    break;
+                case 'plano25':
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar o Plano Família de R$ 25/mês. Como posso proceder?';
+                    break;
+                case 'plano30':
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar o Plano Completo +18 de R$ 30/mês. Como posso proceder?';
+                    break;
+                case 'assinar':
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar um dos planos. Como posso proceder?';
+                    break;
+                case 'contato':
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de mais informações sobre o serviço.';
+                    break;
+                default:
+                    message = 'Olá! Gostaria de saber mais sobre o MasterPlex.';
+            }
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Smooth scroll levemente suave
+        let isScrolling = false;
+        let currentScroll = window.pageYOffset;
+        let targetScroll = currentScroll;
+
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            // Aumenta o valor do scroll target baseado no delta do mouse
+            targetScroll += e.deltaY * 0.8; // Ajuste esse valor: 0.8 = levemente suave
+            targetScroll = Math.max(0, Math.min(targetScroll, document.documentElement.scrollHeight - window.innerHeight));
+            
+            if (!isScrolling) {
+                isScrolling = true;
+                smoothScroll();
+            }
+        }, { passive: false });
+
+        function smoothScroll() {
+            currentScroll += (targetScroll - currentScroll) * 0.15; // 0.15 = suavidade leve
+            
+            if (Math.abs(targetScroll - currentScroll) > 0.5) {
+                window.scrollTo(0, currentScroll);
+                requestAnimationFrame(smoothScroll);
+            } else {
+                window.scrollTo(0, targetScroll);
+                currentScroll = targetScroll;
+                isScrolling = false;
+            }
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function toggleMobileMenu() {
+            mobileMenuBtn.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+        // Close mobile menu when clicking on a link
+        mobileNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', toggleMobileMenu);
+        });
+
+        // Enhanced smooth scroll with offset for header
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    const headerHeight = document.getElementById('header').offsetHeight;
+                    targetScroll = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    currentScroll = window.pageYOffset;
+                    
+                    if (!isScrolling) {
+                        isScrolling = true;
+                        smoothScroll();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
