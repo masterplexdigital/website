@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterPlex</title>
     <link rel="icon" type="image/png" href="assets/img/fav.png">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Masterplex – Streaming de Qualidade">
-  <meta property="og:description" content="Assista conteúdos ao vivo e sob demanda com estabilidade, qualidade e acesso em múltiplos dispositivos.">
-  <meta property="og:image" content="https://masterplex.net/og-masterplex.png">
-  <meta property="og:url" content="https://masterplex.net/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Masterplex">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Masterplex – Streaming de Qualidade">
+    <meta property="og:description" content="Assista conteúdos ao vivo e sob demanda com estabilidade, qualidade e acesso em múltiplos dispositivos.">
+    <meta property="og:image" content="https://masterplex.net/og-masterplex.png">
+    <meta property="og:url" content="https://masterplex.net/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Masterplex">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
     
     <style>
         * {
@@ -164,6 +164,195 @@
             color: #000;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+        }
+
+        /* Popup Modal */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 2px solid #ffc107;
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 193, 7, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .popup-content h2 {
+            color: #ffc107;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #d0d0d0;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ffc107;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .popup-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #ffc107;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .popup-btn:hover {
+            background: #ffca28;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+        }
+
+        .popup-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Success Popup */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, 0.2);
+            animation: scaleIn 0.5s ease;
+        }
+
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: #4caf50;
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: drawCheck 0.5s ease 0.3s forwards;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+
+        .success-message {
+            text-align: center;
+            color: #d0d0d0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .success-message h3 {
+            color: #4caf50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
         }
 
         .mobile-menu {
@@ -860,13 +1049,47 @@
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>Assista Seus Filmes e Séries Favoritos</h1>
-            <p>Mais de 90 mil conteúdos disponíveis em alta qualidade. Tecnologia de ponta para uma experiência única de streaming.</p>
+            <p>Tenha acesso a um vasto catálogo com mais de 90 mil conteúdos dos principais serviços de streaming, tudo em um só lugar. Tecnologia de ponta para uma experiência única.</p>
             <div class="hero-buttons">
-                <a href="#" class="btn-primary" onclick="openWhatsApp('assinar'); return false;">Começar Agora</a>
-                <a href="#" class="btn-secondary" onclick="openWhatsApp('teste'); return false;">Peça um Teste Grátis</a>
+                <button class="btn-primary btn-large" onclick="openTestPopup()">Pedir Teste Grátis</button>
             </div>
         </div>
     </section>
+
+    <!-- Test Popup -->
+    <div class="popup-overlay" id="testPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closeTestPopup()">×</button>
+            <h2>Solicite seu Teste Grátis</h2>
+            <form id="testForm" onsubmit="submitTestForm(event)">
+                <div class="form-group">
+                    <label for="fullName">Nome Completo</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="Digite seu nome completo">
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" required placeholder="(00) 00000-0000">
+                </div>
+                <button type="submit" class="popup-btn" id="submitBtn">Pedir Teste Grátis!</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closeSuccessPopup()">×</button>
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div class="success-message">
+                <h3>Solicitação Enviada!</h3>
+                <p>Recebemos sua solicitação de teste grátis. Em breve entraremos em contato via WhatsApp!</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Features Section -->
     <section class="features" id="recursos">
@@ -896,7 +1119,7 @@
                     </svg>
                 </div>
                 <h3>90 Mil+ Títulos</h3>
-                <p>Catálogo imenso com filmes, séries, documentários e conteúdo exclusivo para toda família.</p>
+                <p>Catálogo imenso com filmes, séries, documentários, esportes ao vivo e conteúdo exclusivo para toda família.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
@@ -932,7 +1155,7 @@
                 <h3>Tecnologia de Ponta</h3>
                 <p>Streaming em 4K Ultra HD com som Dolby Atmos. Nossa infraestrutura garante a melhor qualidade de imagem e som para você.</p>
                 <p>Downloads ilimitados para assistir offline. Legendas e áudios em múltiplos idiomas. Interface intuitiva com recomendações personalizadas baseadas em IA.</p>
-                <p>Perfis individuais para cada membro da família com controle parental avançado.</p>
+                <p>Assista todos os jogos do seu time do coração ao vivo e receba novidades e atualizações de conteúdo semanalmente.</p>
             </div>
         </div>
     </section>
@@ -987,34 +1210,34 @@
     <section class="pricing" id="planos">
         <h2>Escolha Seu Plano Ideal</h2>
         <p style="text-align: center; color: #d0d0d0; font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; line-height: 1.6;">
-            Assine e tenha acesso ao catálogo completo dos principais streamings: Netflix, Amazon Prime, Disney+, HBO Max, Paramount+ e muito mais!
+            Tenha acesso a um vasto catálogo de filmes e séries dos principais serviços de streaming, tudo em um só lugar!
         </p>
         <div class="pricing-grid-dual">
             <div class="pricing-card">
-                <div class="pricing-badge">PLANO FAMÍLIA</div>
-                <h3>Recarga Mensal</h3>
+                <div class="pricing-badge">ESSENCIAL</div>
+                <h3>Plano Essencial</h3>
                 <div class="price">R$ 25<span>/mês</span></div>
                 <ul class="pricing-features">
                     <li>Acesso total ao catálogo</li>
-                    <li>Netflix, Amazon, Disney+ e mais</li>
-                    <li>Qualidade HD e 4K</li>
-                    <li>Conteúdo exclusivo antecipado</li>
-                    <li>Suporte prioritário</li>
+                    <li>Filmes, séries e documentários</li>
+                    <li>Esportes ao vivo</li>
+                    <li>Qualidade HD</li>
+                    <li>Atualizações semanais</li>
                 </ul>
                 <a href="#" class="btn-primary btn-large" onclick="openWhatsApp('plano25'); return false;">Começar R$ 25/mês</a>
             </div>
 
             <div class="pricing-card featured">
-                <div class="pricing-badge">PLANO COMPLETO</div>
-                <h3>Recarga Mensal +18</h3>
+                <div class="pricing-badge">COMPLETO</div>
+                <h3>Plano Completo</h3>
                 <div class="price">R$ 30<span>/mês</span></div>
                 <ul class="pricing-features">
-                    <li>Tudo do Plano Família</li>
-                    <li>Conteúdo Adulto +18</li>
+                    <li>Tudo do Plano Essencial</li>
+                    <li>Conteúdo Adulto +18 (Opcional)</li>
                     <li>Catálogos Premium</li>
-                    <li>Qualidade HD e 4K</li>
-                    <li>Privacidade garantida</li>
-                    <li>Suporte VIP 24/7</li>
+                    <li>Qualidade HD</li>
+                    <li>Atendimento prioritário</li>
+                    <li>Suporte Prioritário</li>
                 </ul>
                 <a href="#" class="btn-primary btn-large" onclick="openWhatsApp('plano30'); return false;">Começar R$ 30/mês</a>
             </div>
@@ -1039,6 +1262,83 @@
     </footer>
 
     <script>
+        // Popup Functions
+        function openTestPopup() {
+            document.getElementById('testPopup').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTestPopup() {
+            document.getElementById('testPopup').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('testForm').reset();
+        }
+
+        function closeSuccessPopup() {
+            document.getElementById('successPopup').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Submit Test Form
+        async function submitTestForm(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+            
+            const fullName = document.getElementById('fullName').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            
+            // Prepare form data for FormSubmit.co
+            const formData = new FormData();
+            formData.append('name', fullName);
+            formData.append('phone', whatsapp);
+            formData.append('_subject', 'Nova Solicitação de Teste Grátis - MasterPlex');
+            formData.append('_captcha', 'false');
+            
+            try {
+                // Using FormSubmit.co service
+                const response = await fetch('https://formsubmit.co/ajax/masterplexdigital@gmail.com', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    // Close form popup
+                    closeTestPopup();
+                    
+                    // Show success popup
+                    setTimeout(() => {
+                        document.getElementById('successPopup').classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }, 300);
+                    
+                    // Auto close success popup after 5 seconds
+                    setTimeout(() => {
+                        closeSuccessPopup();
+                    }, 5000);
+                } else {
+                    alert('Erro ao enviar solicitação. Tente novamente.');
+                }
+            } catch (error) {
+                alert('Erro ao enviar solicitação. Tente novamente.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Pedir Teste Grátis!';
+            }
+        }
+
+        // Close popup when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('popup-overlay')) {
+                if (e.target.id === 'testPopup') {
+                    closeTestPopup();
+                } else if (e.target.id === 'successPopup') {
+                    closeSuccessPopup();
+                }
+            }
+        });
         // WhatsApp Integration
         const whatsappNumber = '5511917128774';
         
@@ -1050,10 +1350,10 @@
                     message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de pedir um teste grátis. Poderia me fornecer mais informações?';
                     break;
                 case 'plano25':
-                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar o Plano Família de R$ 25/mês. Como posso proceder?';
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar o Plano Essencial de R$ 25/mês. Como posso proceder?';
                     break;
                 case 'plano30':
-                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar o Plano Completo +18 de R$ 30/mês. Como posso proceder?';
+                    message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar o Plano Completo de R$ 30/mês. Como posso proceder?';
                     break;
                 case 'assinar':
                     message = 'Olá! Estou entrando em contato através do site MasterPlex e gostaria de assinar um dos planos. Como posso proceder?';
@@ -1154,6 +1454,4 @@
         });
     </script>
 </body>
-
 </html>
-
